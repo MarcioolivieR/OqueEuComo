@@ -64,10 +64,3 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-  atOptions = {
-    'key' : '4a789fba3407f490e3c0162689ef2d04',
-    'format' : 'iframe',
-    'height' : 90,
-    'width' : 728,
-    'params' : {}
-  };
