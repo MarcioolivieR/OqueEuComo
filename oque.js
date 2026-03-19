@@ -1,66 +1,81 @@
-const opcoes = [
-    { nome: "Pizza de Calabresa", icone: "🍕" }, { nome: "Hambúrguer Artesanal", icone: "🍔" },
-    { nome: "Sushi e Sashimi", icone: "🍣" }, { nome: "Tacos Mexicanos", icone: "🌮" },
-    { nome: "Macarronada Italiana", icone: "🍝" }, { nome: "Churrasco", icone: "🍖" },
-    { nome: "Comida Chinesa", icone: "🥡" }, { nome: "Salada Completa", icone: "🥗" },
-    { nome: "Açaí com Granola", icone: "🍧" }, { nome: "Esfiha e Kibe", icone: "🥙" },
-    { nome: "Frango Assado", icone: "🍗" }, { nome: "Hot Dog Especial", icone: "🌭" },
-    { nome: "Feijoada", icone: "🍲" }, { nome: "Lasanha de Carne", icone: "🥘" },
-    { nome: "Coxinha e Salgados", icone: "🥨" }, { nome: "Poke Havaiano", icone: "🥣" },
-    { nome: "Estrogonofe de Frango", icone: "🍛" }, { nome: "Yakisoba", icone: "🍜" },
-    { nome: "Peixe Grelhado", icone: "🐟" }, { nome: "Risoto de Cogumelos", icone: "🍚" },
-    { nome: "Pastel de Feira", icone: "🥟" }, { nome: "Sanduíche Natural", icone: "🥪" },
-    { nome: "Panquecas", icone: "🥞" }, { nome: "Waffles", icone: "🧇" },
-    { nome: "Burrito", icone: "🌯" }, { nome: "Espetinho de Carne", icone: "🍢" },
-    { nome: "Tempura", icone: "🍤" }, { nome: "Omelete Recheada", icone: "🍳" },
-    { nome: "Batata Recheada", icone: "🥔" }, { nome: "Nuggets de Frango", icone: "🐥" },
-    { nome: "Tapioca Recheada", icone: "🌮" }, { nome: "Moqueca de Peixe", icone: "🥘" },
-    { nome: "Bife com Batata Frita", icone: "🥩" }, { nome: "Ceviche", icone: "🥗" },
-    { nome: "Pão de Queijo", icone: "🧀" }, { nome: "Falafel", icone: "🧆" },
-    { nome: "Ramen", icone: "🍜" }, { nome: "Paella", icone: "🥘" },
-    { nome: "Curry de Grão-de-Bico", icone: "🍛" }, { nome: "Nhoque ao Sugo", icone: "🍝" },
-    { nome: "Caldo de Cana e Pastel", icone: "🥤" }, { nome: "Pipoca e Filme", icone: "🍿" },
-    { nome: "Donuts", icone: "🍩" }, { nome: "Bolo de Chocolate", icone: "🍰" },
-    { nome: "Sorvete", icone: "🍦" }, { nome: "Frutas Frescas", icone: "🍎" },
-    { nome: "Petit Gateau", icone: "🧁" }, { nome: "Churros", icone: "🥨" },
-    { nome: "Pudim de Leite", icone: "🍮" }, { nome: "Brigadeiro Gourmet", icone: "🍫" }
-];
+const bancoDeDados = {
+    cafe: [{nome:"Pão de Queijo", icone:"🧀"}, {nome:"Tapioca", icone:"🌮"}, {nome:"Omelete", icone:"🍳"}, {nome:"Panquecas", icone:"🥞"}],
+    almoco: [{nome:"Feijoada", icone:"🍲"}, {nome:"Churrasco", icone:"🍖"}, {nome:"Peixe", icone:"🐟"}, {nome:"Massa", icone:"🍝"}],
+    lanche: [{nome:"Coxinha", icone:"🥨"}, {nome:"Açaí", icone:"🍧"}, {nome:"Sanduíche", icone:"🥪"}, {nome:"Pastel", icone:"🥟"}],
+    jantar: [{nome:"Pizza", icone:"🍕"}, {nome:"Sushi", icone:"🍣"}, {nome:"Hambúrguer", icone:"🍔"}, {nome:"Sopa", icone:"🥣"}],
+    merenda: [{nome:"Bolo", icone:"🍰"}, {nome:"Pipoca", icone:"🍿"}, {nome:"Donuts", icone:"🍩"}, {nome:"Pão com Manteiga", icone:"🍞"}]
+};
+
+let opcoesAtuais = [];
 
 document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('btn-decide');
+    const mealSelector = document.getElementById('meal-selector');
+    const mealDisplay = document.getElementById('meal-type-display');
+    const btnDecide = document.getElementById('btn-decide');
     const foodDisplay = document.getElementById('food-name');
     const iconDisplay = document.querySelector('.placeholder-icon');
+    const btnChange = document.getElementById('btn-change-meal');
 
-    if (!btn) return; // Segurança caso o ID esteja errado
+    // Seleção da refeição
+    document.querySelectorAll('.meal-btn').forEach(botao => {
+        botao.addEventListener('click', () => {
+            const tipo = botao.getAttribute('data-meal');
+            opcoesAtuais = bancoDeDados[tipo];
+            mealDisplay.innerText = "Bóia: " + botao.innerText;
+            mealSelector.style.display = 'none';
+        });
+    });
+
+    // Botão Trocar Refeição
+    btnChange.addEventListener('click', () => {
+        mealSelector.style.display = 'flex';
+        foodDisplay.innerText = "Estou com fome de...";
+        iconDisplay.innerText = "❓";
+        document.getElementById('btn-photo').style.display = "none";
+        document.getElementById('btn-share').style.display = "none";
+        btnDecide.innerText = "SORTEAR MINHA BÓIA";
+    });
 
     let sorteando = false;
 
-    btn.addEventListener('click', () => {
-        if (sorteando) return;
+    btnDecide.addEventListener('click', () => {
+        if (sorteando || opcoesAtuais.length === 0) return;
         sorteando = true;
         
-        btn.innerText = "ESCOLHENDO...";
+        btnDecide.innerText = "A PREPARAR A BÓIA...";
         iconDisplay.classList.add('shaking');
 
         let contador = 0;
         const intervalo = setInterval(() => {
-            const aleatorioTemp = opcoes[Math.floor(Math.random() * opcoes.length)];
-            foodDisplay.innerText = aleatorioTemp.nome;
-            iconDisplay.innerText = aleatorioTemp.icone;
+            const temp = opcoesAtuais[Math.floor(Math.random() * opcoesAtuais.length)];
+            foodDisplay.innerText = temp.nome;
+            iconDisplay.innerText = temp.icone;
             contador++;
 
-            if (contador > 15) {
+            if (contador > 10) {
                 clearInterval(intervalo);
-                const final = opcoes[Math.floor(Math.random() * opcoes.length)];
+                const final = opcoesAtuais[Math.floor(Math.random() * opcoesAtuais.length)];
                 foodDisplay.innerText = final.nome;
                 iconDisplay.innerText = final.icone;
                 iconDisplay.classList.remove('shaking');
-                btn.innerText = "SORTEAR NOVAMENTE";
+                btnDecide.innerText = "SORTEAR OUTRA";
                 sorteando = false;
+                
+                document.getElementById('btn-photo').style.display = "block";
+                document.getElementById('btn-share').style.display = "block";
             }
-        }, 80);
+        }, 120);
     });
 
+    // Câmera e Partilha
+    document.getElementById('btn-photo').addEventListener('click', () => document.getElementById('camera-input').click());
+    document.getElementById('btn-share').addEventListener('click', () => {
+        if (navigator.share) {
+            navigator.share({
+                title: 'Minha Bóia!',
+                text: `O Bóia escolheu ${foodDisplay.innerText} para mim!`,
+                url: window.location.href
+            }).catch(() => {});
+        }
+    });
 });
-
-
