@@ -1,0 +1,15 @@
+{
+  "name": "Bóia - O que comer?",
+  "short_name": "Bóia",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#1e1e2e",
+  "theme_color": "#ff4757",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/1046/1046784.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
